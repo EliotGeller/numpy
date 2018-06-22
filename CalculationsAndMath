@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jun 20 17:54:18 2018
+
+@author: eliotgeller
+"""
+
+import numpy as np
+import numpy.polynomial.polynomial as poly
+
+# Calculations within numpy arrays
+x = np.random.randint(0, 50, size=5)
+y = np.random.randint(0, 50, size=(2, 2))
+
+x2 = x + 1j*x
+y2 = y + 1j*y
+
+xRandFloat = np.random.rand(5)*10 
+
+print("x: ", x)
+print("argmax: ", x.argmax())
+print()
+
+print("y: ", y)
+print("argmaxx: ", y.argmax(1))
+print()
+
+print("maxx: ", x.max())
+print("maxx: ", y.max(0))
+print()
+
+print("argmin: ", x.argmin())
+print("argmin: ", y.argmin(0))
+print()
+
+print("min: ", x.min())
+print("min: ", y.min(0))
+print()
+
+print("Peek to peek: ", x.ptp())
+print("Peek to peek: ", y.ptp(0))
+print()
+
+print("x2: ", x2)
+print("C.C: ", x2.conj())
+print()
+
+print("y2: ", y2)
+print("C.C: ", y2.conj())
+print()
+
+print("xrandL ", xRandFloat)
+print("rounded:", xRandFloat.round())
+print()
+
+print("trace:", y.trace())
+print("sum: ", y.sum(0))
+print()
+
+print("mean: ", y.mean(0))
+print("var: ", y.var(0))
+print("std: ", y.std(0))
+print()
+
+# Math functions
+xData = np.linspace(0, np.pi)
+
+print("Original data: ", xData)
+print()
+
+xSin = np.sin(xData)
+print("Sin of data: ", xSin)
+print()
+
+xArcCos = np.arccos(xSin)
+print("Arccos of sin: ", xArcCos)
+print()
+
+a = np.array([[1, 0, 0], [0, 0, 1]])
+b = np.array([0, 1, 0])
+
+hypot = np.hypot(a, b)
+print("Hypot: ", hypot)
+print()
+
+xDegrees = np.degrees(xData)
+xRadians = np.radians(xDegrees)
+print("X in degrees: ", xDegrees)
+print()
+print("X in radians: ", xRadians)
+print()
+
+xRounded = np.round(xData, decimals=2)
+print("X rounded: ", xRounded)
+print()
+
+xFloored = np.floor(xData)
+xCeiling = np.ceil(xData)
+
+print("X floored: ", xFloored)
+print()
+print("X ceiling: ", xCeiling)
+print()
+
+cross = np.cross(a, b)
+print("Cross-Product: ", cross)
+print()
+
+exp = np.exp(xData)     #e**
+exp2 = np.exp2(xData)   #2**
+
+print("Exponent: ", exp)
+print()
+print("Exponent2: ", exp2)
+print()
+
+log = np.log(exp)
+log10 = np.log10(exp)
+
+print("Natural log: ", log)
+print()
+print("Log base 10: ", log10)
+print()
+
+# Integration
+x = np.linspace(0, np.pi, 10000)
+dx = x[1]-x[0]
+y = np.sin(x)
+
+area = 0
+for i in range(len(x)-1):
+    yBig = y[i]
+    if y[i+1] > yBig:
+        yBig = y[i+1]
+    area += yBig * dx
+
+print(area)
+print()
+
+areaSmall = 0
+for i in range(len(x)-1):
+    ySmall = y[i]
+    if y[i+1] < ySmall:
+        ySmall = y[i+1]
+    areaSmall += ySmall * dx
+
+print(areaSmall)
+print()
+
+areaTri = 0
+for i in range(len(x)-1):
+    ySmall = y[i]
+    yBig = y[i]
+    if y[i+1] < ySmall:
+        ySmall = y[i+1]
+    elif y[i+1] > yBig:
+        yBig = y[i+1]
+    
+    areaTri += ySmall * dx
+    areaTri += dx * (yBig-ySmall)/2
+    
+print(areaTri)
+print()
+
+areaTriMethod = np.trapz(y=y, x=x)
+print(areaTriMethod)
+        
+# Statistics
+data = np.random.randn(1000)
+
+for i in range(5):
+    data = np.append(data, np.nan)
+    
+np.random.shuffle(data)
+
+print("Original: ", data)
+print()
+#print("nth percentile: ", np.percentile(data, 90))
+#print()
+#print("Median: ", np.median(data))
+#print()
+#print("Average: ", np.average(data))
+#print()
+#print("Mean: ", np.mean(data))
+#print()
+#print("std: ", np.std(data))
+#print()
+#print("var: ", np.var(data))
+
+# for not available case
+print("nth percentile nan: ", np.nanpercentile(data, 20))
+print()
+print("Median nan: ", np.nanmedian(data))
+print()
+print("Mean nan: ", np.nanmean(data))
+print()
+print("std nan: ", np.nanstd(data))
+print()
+print("var nan: ", np.nanvar(data))
+print()
+
+# Polynomials
+#a + bx + cx^2 + dx^3 + ...
+coef = [1, 2, 3]    #[a, b, c, d, ...]
+coef2 = [2, 3, 4]
+coef3 = [0, 1, 2, 3]
+x = [1, 2, 3]             
+y = [1, 4, 9]
+
+polyClass = poly.Polynomial(coef)
+polyClass2 = poly.Polynomial(coef2)
+
+#print(polyClass)
+#print(polyClass2)
+## (a+a') + (b+b')x + (c+c')x^2
+#print(polyClass + polyClass2)
+#print(polyClass - polyClass2)
+#print(polyClass * polyClass2)   #(a+bx+cv^2) * (a'+b'x+c'x^2)
+#print()
+
+values = poly.polyval(x, coef)  #f(x) ......
+print(values)
+print()
+
+values2D = poly.polyval2d(x, y, [coef, coef2])
+print(values2D)
+print()
+
+roots = poly.polyroots(coef)
+print(roots)
+print()
+
+fittedVals = poly.polyfit(x, y, deg=2)
+print(fittedVals)
+print()
+
+print(poly.polyder(coef, m=2))
+print()
+
+print(poly.polyint(coef, m=2, k=[5,2]))
+print()
+
+print(poly.polyadd(coef, coef3))
+print()
+
+print(poly.polysub(coef, coef3))
+print()
+
+print(poly.polymul(coef, coef3))
+print()
+
+print(poly.polymulx(coef))
+print()
+
+print(poly.polydiv(coef3, coef))
+print()
+
+print(poly.polypow(coef, pow=3, maxpower=3))
+print()
+
+
+
+
+
+
+
+
